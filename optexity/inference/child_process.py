@@ -607,6 +607,19 @@ async def task_processor():
                     )
                 continue
 
+            from optexity.schema.automation import Automation
+
+            with open("test_automation.json", "r") as f:
+                automation = json.load(f)
+                automation = Automation.model_validate(automation)
+
+            task.automation = automation
+
+            # The local test request uses an existing endpoint whose server-side
+            # automation expects input parameters, while the RoboForm take-home
+            # automation has no inputs.
+            task.input_parameters = {}
+
             task_running = True
             last_task_start_time = datetime.now(timezone.utc)
             current_task_timeout_minutes = task.max_timeout_in_minutes
