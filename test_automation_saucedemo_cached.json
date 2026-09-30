@@ -1,0 +1,104 @@
+{
+  "url": "https://www.saucedemo.com/",
+  "parameters": {
+    "input_parameters": {},
+    "generated_parameters": {}
+  },
+  "nodes": [
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[data-test='username']\")",
+          "prompt_instructions": "Enter the username in the Username field.",
+          "input_text": "standard_user"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[data-test='password']\")",
+          "prompt_instructions": "Enter the password in the Password field.",
+          "input_text": "secret_sauce"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "click_element": {
+          "command": "locator(\"[data-test='login-button']\")",
+          "prompt_instructions": "Click the Login button."
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "click_element": {
+          "command": "locator(\"[data-test='add-to-cart-sauce-labs-backpack']\")",
+          "prompt_instructions": "Add Sauce Labs Backpack to the cart."
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "click_element": {
+          "command": "locator(\"[data-test='shopping-cart-link']\")",
+          "prompt_instructions": "Open the shopping cart."
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "click_element": {
+          "command": "locator(\"[data-test='checkout']\")",
+          "prompt_instructions": "Click the Checkout button."
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[data-test='firstName']\")",
+          "prompt_instructions": "Enter the first name in the First Name field.",
+          "input_text": "Test"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[data-test='lastName']\")",
+          "prompt_instructions": "Enter the last name in the Last Name field.",
+          "input_text": "User"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[data-test='postalCode']\")",
+          "prompt_instructions": "Enter the postal code in the Zip or Postal Code field.",
+          "input_text": "302001"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "click_element": {
+          "command": "locator(\"[data-test='continue']\")",
+          "prompt_instructions": "Click Continue to proceed to the checkout overview."
+        }
+      }
+    }
+  ]
+}

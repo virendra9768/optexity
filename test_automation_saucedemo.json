@@ -1,0 +1,19 @@
+{
+  "url": "https://www.saucedemo.com/",
+  "parameters": {
+    "input_parameters": {},
+    "generated_parameters": {}
+  },
+  "nodes": [
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "agentic_task": {
+          "task": "Log in using username standard_user and password secret_sauce. Add Sauce Labs Backpack to the cart, open the cart, proceed to checkout, fill first name as Test, last name as User, postal code as 302001, and continue to the checkout overview page.",
+          "max_steps": 20,
+          "backend": "browser_use"
+        }
+      }
+    }
+  ]
+}
