@@ -1,7 +1,10 @@
 import logging
+import os
+from pathlib import Path
 
 from browser_use import Agent, BrowserSession, Tools
 
+from optexity.action_memory.compiler import compile_cache
 from optexity.inference.infra.browser import Browser
 from optexity.inference.models import normalize_model
 from optexity.inference.models.chat_litellm import build_agent_llm
@@ -13,6 +16,41 @@ from optexity.schema.memory import Memory
 from optexity.schema.task import Task
 
 logger = logging.getLogger(__name__)
+
+ACTION_CACHE_PATH_ENV = "BROWSER_USE_ACTION_CACHE_PATH"
+
+
+def compile_agent_memory(
+    *,
+    agent_id: str,
+    step_directory,
+) -> None:
+    cache_path = os.getenv(ACTION_CACHE_PATH_ENV)
+
+    if not cache_path:
+        return
+
+    output_path = step_directory / "deterministic_automation.json"
+
+    try:
+        compile_cache(
+            cache_path=Path(cache_path),
+            output_path=output_path,
+            requested_agent_id=agent_id,
+        )
+    except Exception as exc:
+        logger.warning(
+            "Failed to compile deterministic action memory " "for agent %s: %s",
+            agent_id,
+            exc,
+        )
+        return
+
+    logger.info(
+        "Generated deterministic action memory for agent %s at %s",
+        agent_id,
+        output_path,
+    )
 
 
 async def handle_agentic_task(
@@ -70,6 +108,12 @@ async def handle_agentic_task(
         await agent.browser_session.start()
         logger.debug(f"Finally running agentic task on browser_use {browser.cdp_url} ")
         history = await agent.run(max_steps=agentic_task_action.max_steps)
+
+        compile_agent_memory(
+            agent_id=str(agent.id),
+            step_directory=step_directory,
+        )
+
         logger.debug(f"Agentic task completed on browser_use {browser.cdp_url} ")
 
         agent.stop()

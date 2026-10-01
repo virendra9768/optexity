@@ -2,8 +2,7 @@ import json
 
 import pytest
 
-from optexity.schema.automation import Automation
-from scripts.compile_action_cache import (
+from optexity.action_memory.compiler import (
     CompileError,
     choose_selector,
     compile_cache,
@@ -11,6 +10,7 @@ from scripts.compile_action_cache import (
     load_records,
     select_agent_run,
 )
+from optexity.schema.automation import Automation
 
 
 def make_element(
