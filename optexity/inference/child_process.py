@@ -609,7 +609,12 @@ async def task_processor():
 
             from optexity.schema.automation import Automation
 
-            with open("test_automation.json", "r") as f:
+            automation_path = os.getenv(
+                "OPTEXITY_TEST_AUTOMATION_PATH",
+                "test_automation.json",
+            )
+
+            with open(automation_path, "r") as f:
                 automation = json.load(f)
                 automation = Automation.model_validate(automation)
 
