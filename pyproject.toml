@@ -45,6 +45,7 @@ dev = [
     "black",
     "isort",
     "pre-commit",
+    "pytest",
 ]
 
 [project.scripts]
