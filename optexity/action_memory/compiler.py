@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-
-import argparse
 import json
 from pathlib import Path
 from typing import Any
@@ -218,21 +215,6 @@ def compile_record(
 
     element_description = describe_element(interacted_element)
 
-    if action_name == "done":
-        return None, "completion"
-
-    if is_failed_record(record):
-        return None, "failed"
-
-    if not isinstance(action_payload, dict):
-        raise CompileError(f"Record {record_number} action payload is invalid.")
-
-    interacted_element = record.get("interacted_element")
-
-    command, selector_description = choose_selector(interacted_element)
-
-    element_description = describe_element(interacted_element)
-
     if action_name == "input":
         input_text = action_payload.get("text")
 
@@ -250,34 +232,35 @@ def compile_record(
         if action_payload.get("clear") is False:
             input_action["fill_or_type"] = "type"
 
-        node = {
-            "type": "action_node",
-            "interaction_action": {
-                "input_text": input_action,
+        return (
+            {
+                "type": "action_node",
+                "interaction_action": {
+                    "input_text": input_action,
+                },
             },
-        }
+            f"input -> {selector_description}",
+        )
 
-        return node, f"input -> {selector_description}"
+    click_action: dict[str, Any] = {
+        "command": command,
+        "prompt_instructions": (f"Click {element_description}."),
+    }
 
-    if action_name == "click":
-        click_action: dict[str, Any] = {
-            "command": command,
-            "prompt_instructions": (f"Click {element_description}."),
-        }
+    button = action_payload.get("button")
 
-        button = action_payload.get("button")
+    if button in {"left", "right", "middle"}:
+        click_action["button"] = button
 
-        if button in {"left", "right", "middle"}:
-            click_action["button"] = button
-
-        node = {
+    return (
+        {
             "type": "action_node",
             "interaction_action": {
                 "click_element": click_action,
             },
-        }
-
-        return node, f"click -> {selector_description}"
+        },
+        f"click -> {selector_description}",
+    )
 
 
 def compile_cache(
@@ -390,49 +373,3 @@ def compile_cache(
         print(f"  {classification}")
 
     print(f"\nValidated output: {output_path}")
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description=(
-            "Compile Browser Use execution cache records "
-            "into a deterministic Optexity automation."
-        )
-    )
-
-    parser.add_argument(
-        "--cache",
-        required=True,
-        type=Path,
-        help="Path to the Browser Use JSONL action cache.",
-    )
-
-    parser.add_argument(
-        "--output",
-        required=True,
-        type=Path,
-        help="Path for the generated Optexity automation JSON.",
-    )
-
-    parser.add_argument(
-        "--agent-id",
-        help=(
-            "Compile a specific agent run. "
-            "Defaults to the latest agent_id in the cache."
-        ),
-    )
-
-    args = parser.parse_args()
-
-    try:
-        compile_cache(
-            cache_path=args.cache,
-            output_path=args.output,
-            requested_agent_id=args.agent_id,
-        )
-    except CompileError as exc:
-        raise SystemExit(f"Compilation failed: {exc}") from exc
-
-
-if __name__ == "__main__":
-    main()
