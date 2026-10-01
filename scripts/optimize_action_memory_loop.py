@@ -1,4 +1,5 @@
 import argparse
+import json
 from pathlib import Path
 
 from optexity.action_memory.compiler import CompileError
@@ -67,7 +68,30 @@ def main() -> None:
         default="http://localhost:9000/is_task_running",
     )
 
+    parser.add_argument(
+        "--endpoint-name",
+        required=True,
+        help=("Existing Optexity endpoint used to allocate " "the local test task."),
+    )
+
+    parser.add_argument(
+        "--input-parameters-json",
+        default="{}",
+        help=(
+            "JSON object containing any input parameters "
+            "required by the allocation endpoint."
+        ),
+    )
+
     args = parser.parse_args()
+
+    try:
+        input_parameters = json.loads(args.input_parameters_json)
+    except json.JSONDecodeError as exc:
+        parser.error(f"--input-parameters-json is invalid JSON: {exc}")
+
+    if not isinstance(input_parameters, dict):
+        parser.error("--input-parameters-json must decode " "to a JSON object.")
 
     try:
         automation = optimize_in_loop(
@@ -76,6 +100,8 @@ def main() -> None:
             cache_path=args.cache,
             generated_dir=args.generated_dir,
             task=args.task,
+            endpoint_name=args.endpoint_name,
+            input_parameters=input_parameters,
             inference_url=args.inference_url,
             status_url=args.status_url,
             max_iterations=args.max_iterations,

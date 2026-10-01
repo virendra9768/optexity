@@ -222,6 +222,8 @@ def run_local_automation(
     *,
     inference_url: str,
     status_url: str,
+    endpoint_name: str,
+    input_parameters: dict[str, Any],
     timeout_seconds: float = 180.0,
 ) -> tuple[str, float]:
     started_at = time.monotonic()
@@ -229,10 +231,8 @@ def run_local_automation(
     response = httpx.post(
         inference_url,
         json={
-            "endpoint_name": ("extract_price_stockanalysis-73f66af3"),
-            "input_parameters": {
-                "stock_ticker": ["NVDA"],
-            },
+            "endpoint_name": endpoint_name,
+            "input_parameters": input_parameters,
             "unique_parameter_names": [],
         },
         timeout=30.0,
@@ -297,6 +297,8 @@ def optimize_in_loop(
     cache_path: Path,
     generated_dir: Path,
     task: str,
+    endpoint_name: str,
+    input_parameters: dict[str, Any],
     inference_url: str = ("http://localhost:9000/inference"),
     status_url: str = ("http://localhost:9000/is_task_running"),
     max_iterations: int = 3,
@@ -337,6 +339,8 @@ def optimize_in_loop(
         task_id, elapsed = run_local_automation(
             inference_url=inference_url,
             status_url=status_url,
+            endpoint_name=endpoint_name,
+            input_parameters=input_parameters,
         )
 
         after_cache_lines = cache_line_count(cache_path)
@@ -421,6 +425,8 @@ def optimize_in_loop(
     task_id, elapsed = run_local_automation(
         inference_url=inference_url,
         status_url=status_url,
+        endpoint_name=endpoint_name,
+        input_parameters=input_parameters,
     )
 
     after_final_cache = cache_line_count(cache_path)
