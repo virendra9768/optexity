@@ -243,6 +243,20 @@ The loop stops when:
 - no new deterministic nodes are learned; or
 - max iterations is reached.
 
+The local task-allocation endpoint is configurable through the CLI instead of being hardcoded. This keeps the optimizer reusable across different local Optexity setups.
+
+Example:
+
+```bash
+python scripts/optimize_action_memory_loop.py   --seed test_automation.json   --current-automation /path/to/current.json   --cache /path/to/cache.jsonl   --generated-dir /path/to/iterations   --task "fill the full name as myname, address line one as xyz and line 2 as abc, city as SF"   --endpoint-name <existing-optexity-endpoint>   --input-parameters-json '{}'
+```
+
+If the selected allocation endpoint requires input parameters, provide them as a JSON object:
+
+```bash
+--input-parameters-json '{"example_key":["example_value"]}'
+```
+
 ### SauceDemo convergence result
 
 ```text
@@ -356,6 +370,14 @@ Run inference:
 ```bash
 optexity inference --port 9000 --child_process_id 0
 ```
+
+Then run the optimizer with an existing local Optexity endpoint used only to allocate the task:
+
+```bash
+python scripts/optimize_action_memory_loop.py   --seed test_automation.json   --current-automation /path/to/current.json   --cache /path/to/cache.jsonl   --generated-dir /path/to/iterations   --task "fill the full name as myname, address line one as xyz and line 2 as abc, city as SF"   --endpoint-name <existing-optexity-endpoint>   --input-parameters-json '{}'
+```
+
+If that endpoint requires inputs, pass them through `--input-parameters-json`.
 
 ---
 
