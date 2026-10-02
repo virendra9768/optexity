@@ -1,0 +1,49 @@
+{
+  "url": "https://www.roboform.com/filling-test-all-fields",
+  "parameters": {
+    "input_parameters": {},
+    "generated_parameters": {}
+  },
+  "nodes": [
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[name='04fullname']\")",
+          "prompt_instructions": "Enter the full name in the Full Name field",
+          "input_text": "myname"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[name='10address1']\")",
+          "prompt_instructions": "Enter the first address line in the Address Line 1 field",
+          "input_text": "xyz"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[name='11address2']\")",
+          "prompt_instructions": "Enter the second address line in the Address Line 2 field",
+          "input_text": "abc"
+        }
+      }
+    },
+    {
+      "type": "action_node",
+      "interaction_action": {
+        "input_text": {
+          "command": "locator(\"[name='13adr_city']\")",
+          "prompt_instructions": "Enter the city in the City field",
+          "input_text": "SF"
+        }
+      }
+    }
+  ]
+}
